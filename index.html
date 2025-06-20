@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro品种同环比分析</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- 引入SheetJS库（用于读取Excel） -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- 引入ExcelJS库（用于生成带样式的Excel） -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Pro品种同环比分析</h1>
+        
+        <div class="setting-item">
+            <label>1.请选择文件：</label>
+            <div class="folder-input-group">
+                <input type="text" id="folderPath" placeholder="请选择Excel文件" readonly style="cursor: pointer;">
+                <button id="selectFolderBtn">选择</button>
+                <input type="file" id="folderInput" multiple accept=".xlsx,.xls" style="display: none;">
+            </div>
+        </div>
+        
+        <div class="setting-item">
+            <label>2.请选择标题行：</label>
+            <select id="headerRowSelect">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        
+        <button id="processBtn" class="process-btn" disabled>开始处理</button>
+        
+        <div id="errorSection" class="error-section" style="display: none;">
+            <p id="errorMessage"></p>
+        </div>
+    </div>
+    
+    <!-- 固定悬浮的下载按钮 -->
+    <button id="downloadBtn" class="download-btn-float" disabled>
+        下载结果
+    </button>
+    
+    <!-- 引入JavaScript模块 -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>
