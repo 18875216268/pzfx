@@ -1,0 +1,32 @@
+/* 通知样式 */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 3000;
+}
+
+.notification {
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    min-width: 260px;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    font-size: 14px;
+    color: #333;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    border-left: 4px solid #52c41a;
+}
+
+.notification.error {
+    border-left: 4px solid #ff4d4f;
+}

@@ -4,26 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pro品种同环比分析</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- 引入SheetJS库（用于读取Excel） -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- 引入ExcelJS库（用于生成带样式的Excel） -->
+    <!-- 只引入ExcelJS库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+    <!-- 样式文件 -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="gonggong/gonggong.css">
+    <link rel="stylesheet" href="tongzhi/tongzhi.css">
+    <link rel="stylesheet" href="pipei/pipei.css">
 </head>
 <body>
     <div class="container">
         <h1>Pro品种同环比分析</h1>
         
-        <div class="setting-item">
+        <div class="form-group">
             <label>1.请选择文件：</label>
-            <div class="folder-input-group">
-                <input type="text" id="folderPath" placeholder="请选择Excel文件" readonly style="cursor: pointer;">
-                <button id="selectFolderBtn">选择</button>
+            <div class="flex-container">
+                <input type="text" id="folderPath" class="input input-readonly flex-1" placeholder="请选择Excel文件" readonly>
+                <button id="selectFolderBtn" class="btn btn-primary">选择</button>
                 <input type="file" id="folderInput" multiple accept=".xlsx,.xls" style="display: none;">
             </div>
         </div>
         
-        <div class="setting-item">
+        <div class="form-group">
             <label>2.请选择标题行：</label>
             <select id="headerRowSelect">
                 <option value="1">1</option>
@@ -34,19 +36,52 @@
             </select>
         </div>
         
-        <button id="processBtn" class="process-btn" disabled>开始处理</button>
+        <div class="flex-container">
+            <button id="processBtn" class="btn btn-primary btn-large flex-1" disabled>开始处理</button>
+            <button id="matchBtn" class="btn btn-success btn-large flex-1" disabled>匹配数据</button>
+        </div>
         
-        <div id="errorSection" class="error-section" style="display: none;">
-            <p id="errorMessage"></p>
+        <div id="errorSection" class="error-container" style="display: none;">
+            <p id="errorMessage" class="error-message"></p>
         </div>
     </div>
     
-    <!-- 固定悬浮的下载按钮 -->
-    <button id="downloadBtn" class="download-btn-float" disabled>
-        下载结果
-    </button>
+    <button id="downloadBtn" class="btn btn-primary float-bottom-right" disabled>下载结果</button>
     
-    <!-- 引入JavaScript模块 -->
-    <script type="module" src="script.js"></script>
+    <!-- 匹配数据弹窗 -->
+    <div id="matchModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <h2 class="modal-title">匹配数据配置</h2>
+            
+            <div class="modal-section">
+                <label>1.选择xlsx文件：</label>
+                <div class="flex-container">
+                    <input type="text" id="matchFilePath" class="input input-readonly flex-1" placeholder="请选择Excel文件" readonly>
+                    <button id="selectMatchFileBtn" class="btn btn-primary">选择</button>
+                    <input type="file" id="matchFileInput" accept=".xlsx,.xls" style="display: none;">
+                </div>
+            </div>
+            
+            <div class="modal-section">
+                <label>2.选择添加字段：</label>
+                <div id="fieldTagsArea" class="field-tags-area"></div>
+            </div>
+            
+            <div class="modal-footer">
+                <button id="cancelMatchBtn" class="btn">取消</button>
+                <button id="confirmMatchBtn" class="btn btn-primary">确认</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification-container"></div>
+
+    <!-- JavaScript文件 -->
+    <script src="gonggong/gonggong.js"></script>
+    <script src="tongzhi/tongzhi.js"></script>
+    <script src="huizong/fenzu.js"></script>
+    <script src="huizong/huizong.js"></script>
+    <script src="pipei/pipei.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

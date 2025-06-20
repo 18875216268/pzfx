@@ -1,10 +1,7 @@
-/* 基础重置 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* 基础样式重置 */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* 页面布局 */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
     background: #f5f5f5;
@@ -14,7 +11,7 @@ body {
     justify-content: center;
 }
 
-/* 主容器 */
+/* 容器样式 */
 .container {
     background: white;
     border-radius: 8px;
@@ -24,7 +21,6 @@ body {
     max-width: 500px;
 }
 
-/* 标题 */
 h1 {
     font-size: 24px;
     color: #333;
@@ -33,120 +29,59 @@ h1 {
     font-weight: normal;
 }
 
-/* 设置项 */
-.setting-item {
+/* 表单样式 */
+.form-group {
     margin-bottom: 20px;
 }
 
-.setting-item label {
+.form-group label {
     display: block;
     margin-bottom: 8px;
     color: #555;
     font-size: 14px;
 }
 
-/* 文件夹输入组 */
-.folder-input-group {
+.flex-container {
     display: flex;
     gap: 10px;
 }
 
-#folderPath {
-    flex: 1;
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    background: #fafafa;
-    cursor: pointer;
+.flex-1 { flex: 1; }
+
+/* 悬浮下载按钮 */
+.float-bottom-right {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    min-width: 100px;
 }
 
-#folderPath:hover {
-    background: #f0f0f0;
-    border-color: #bbb;
+/* 加载动画 */
+.loading {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 0.8s linear infinite;
 }
 
-#selectFolderBtn {
-    padding: 8px 20px;
-    background: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-#selectFolderBtn:hover {
-    background: #45a049;
-}
-
-/* 下拉选择框 */
-#headerRowSelect {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    width: 100%;
-    background: white;
-    cursor: pointer;
-}
-
-/* 处理按钮 */
-.process-btn {
-    width: 100%;
-    padding: 12px;
-    background: #2196F3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-.process-btn:hover:not(:disabled) {
-    background: #1976D2;
-}
-
-.process-btn:disabled {
-    background: #ccc;
-    cursor: not-allowed;
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 /* 错误提示 */
-.error-section {
+.error-container {
     margin-top: 20px;
 }
 
-.error-section p {
+.error-message {
     color: #f44336;
     background: #ffebee;
     padding: 10px;
     border-radius: 4px;
     font-size: 14px;
-}
-
-/* 悬浮下载按钮 */
-.download-btn-float {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    padding: 12px 24px;
-    background: #FF9800;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-}
-
-.download-btn-float:hover:not(:disabled) {
-    background: #F57C00;
-}
-
-.download-btn-float:disabled {
-    background: #ccc;
-    cursor: not-allowed;
 }
