@@ -60,8 +60,12 @@
             <p id="errorMessage" class="error-message"></p>
         </div>
     </div>
-    
-    <button id="downloadBtn" class="btn btn-primary float-bottom-right" disabled>下载结果</button>
+
+    <!-- 下载按钮结构 -->
+    <button id="downloadBtn" class="download-icon-btn" disabled>
+        <img src="下载.png" alt="下载" class="download-icon">
+        <span class="loading-spinner" style="display: none;"></span>
+    </button>
     
     <div id="matchModal" class="modal-overlay" style="display: none;">
         <div class="modal-container">

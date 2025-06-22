@@ -137,7 +137,13 @@ async function downloadResult() {
         return;
     }
     
-    utils.setLoadingState(document.getElementById('downloadBtn'), true, '下载结果');
+    // 修改：切换显示加载动画
+    const downloadBtn = document.getElementById('downloadBtn');
+    const downloadIcon = downloadBtn.querySelector('.download-icon');
+    const loadingSpinner = downloadBtn.querySelector('.loading-spinner');
+    
+    downloadIcon.style.display = 'none';
+    loadingSpinner.style.display = 'block';
     
     try {
         const buffer = await state.summaryWorkbook.xlsx.writeBuffer();
@@ -155,7 +161,9 @@ async function downloadResult() {
     } catch (error) {
         notification.show('下载失败', 'error');
     } finally {
-        utils.setLoadingState(document.getElementById('downloadBtn'), false, '下载结果');
+        // 修改：恢复显示下载图标
+        downloadIcon.style.display = 'block';
+        loadingSpinner.style.display = 'none';
     }
 }
 
