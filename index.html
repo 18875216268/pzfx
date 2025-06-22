@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pro品种同环比分析</title>
-    <!-- 只引入ExcelJS库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
-    <!-- 样式文件 -->
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="gonggong/gonggong.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="tianjia/tianjia.css">
     <link rel="stylesheet" href="tongzhi/tongzhi.css">
-    <link rel="stylesheet" href="pipei/pipei.css">
 </head>
 <body>
     <div class="container">
@@ -28,6 +26,7 @@
         <div class="form-group">
             <label>2.请选择标题行：</label>
             <select id="headerRowSelect">
+                <option value="">无</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -36,10 +35,26 @@
             </select>
         </div>
         
-        <div class="flex-container">
-            <button id="processBtn" class="btn btn-primary btn-large flex-1" disabled>开始处理</button>
-            <button id="matchBtn" class="btn btn-success btn-large flex-1" disabled>匹配数据</button>
+        <div class="form-group">
+            <label>3.请选择分组字段：</label>
+            <div id="groupFieldsArea" class="field-tags-area">
+                <div class="placeholder">请先选择文件和标题行</div>
+            </div>
         </div>
+        
+        <div class="form-group">
+            <label>4.请选择药品基础信息：</label>
+            <div id="basicInfoFieldsArea" class="field-tags-area">
+                <div class="placeholder">请先选择文件和标题行</div>
+            </div>
+        </div>
+        
+        <div class="flex-container">
+            <button id="matchBtn" class="btn btn-success btn-large flex-1" disabled>添加字段</button>
+            <button id="processBtn" class="btn btn-primary btn-large flex-1" disabled>开始处理</button>
+        </div>
+        
+        <div id="matchConfigHint" class="match-config-hint" style="display: none;"></div>
         
         <div id="errorSection" class="error-container" style="display: none;">
             <p id="errorMessage" class="error-message"></p>
@@ -48,11 +63,8 @@
     
     <button id="downloadBtn" class="btn btn-primary float-bottom-right" disabled>下载结果</button>
     
-    <!-- 匹配数据弹窗 -->
     <div id="matchModal" class="modal-overlay" style="display: none;">
         <div class="modal-container">
-            <h2 class="modal-title">匹配数据配置</h2>
-            
             <div class="modal-section">
                 <label>1.选择xlsx文件：</label>
                 <div class="flex-container">
@@ -63,8 +75,29 @@
             </div>
             
             <div class="modal-section">
-                <label>2.选择添加字段：</label>
-                <div id="fieldTagsArea" class="field-tags-area"></div>
+                <label>2.选择标题行：</label>
+                <select id="matchHeaderRowSelect">
+                    <option value="">无</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            
+            <div class="modal-section">
+                <label>3.选择匹配字段：</label>
+                <div id="matchFieldsArea" class="field-tags-area">
+                    <div class="placeholder">请先选择文件和标题行</div>
+                </div>
+            </div>
+            
+            <div class="modal-section">
+                <label>4.选择添加字段：</label>
+                <div id="addFieldsArea" class="field-tags-area">
+                    <div class="placeholder">请先选择文件和标题行</div>
+                </div>
             </div>
             
             <div class="modal-footer">
@@ -76,12 +109,13 @@
     
     <div class="notification-container"></div>
 
-    <!-- JavaScript文件 -->
     <script src="gonggong/gonggong.js"></script>
     <script src="tongzhi/tongzhi.js"></script>
     <script src="huizong/fenzu.js"></script>
-    <script src="huizong/huizong.js"></script>
-    <script src="pipei/pipei.js"></script>
+    <script src="huizong/jisuan.js"></script>
+    <script src="huizong/juhe.js"></script>
+    <script src="huizong/tianchong.js"></script>
+    <script src="tianjia/tianjia.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
