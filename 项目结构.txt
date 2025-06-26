@@ -12,9 +12,6 @@
 │   ├── jisuan.js
 │   ├── juhe.js
 │   ├── tianchong.js
-├── tianjia/
-│   ├── tianjia.css
-│   ├── tianjia.js
 ├── tongzhi/
 │   ├── tongzhi.css
 │   ├── tongzhi.js
