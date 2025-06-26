@@ -1,0 +1,401 @@
+/* =====================================================
+   基础重置和页面布局
+   ===================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* =====================================================
+   通用布局类
+   ===================================================== */
+.flex-container {
+    display: flex;
+    gap: 10px;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+/* =====================================================
+   表单控件样式
+   ===================================================== */
+.input, select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
+    background: white;
+}
+
+.input {
+    height: 36px;
+}
+
+.input-readonly {
+    background: #fafafa;
+    cursor: not-allowed;
+}
+
+select {
+    cursor: pointer;
+}
+
+/* =====================================================
+   按钮样式
+   ===================================================== */
+.btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: #2196F3;
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #1976D2;
+}
+
+.btn-large {
+    padding: 10px 24px;
+    font-size: 16px;
+}
+
+.btn:disabled {
+    background: #ccc !important;
+    color: #fff !important;
+    cursor: not-allowed !important;
+}
+
+/* =====================================================
+   下载按钮样式
+   ===================================================== */
+.download-icon-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border: none;
+    background: #4CAF50;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.download-icon-btn:hover:not(:disabled) {
+    background: #45a049;
+    transform: scale(1.1);
+}
+
+.download-icon-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.download-icon {
+    width: 28px;
+    height: 28px;
+    color: white;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    border-top-color: #2196F3;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* =====================================================
+   通用字段容器样式
+   ===================================================== */
+.field-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    background: white;
+    min-height: 60px;
+}
+
+/* 美化滚动条 */
+.field-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.field-container::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 3px;
+}
+
+.field-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.field-container::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+.field-container.drag-over {
+    background: #e3f2fd;
+    border-color: #2196F3;
+}
+
+/* 统一的占位文字样式 */
+.placeholder {
+    text-align: center;
+    color: #999;
+    padding: 15px 10px;
+    font-size: 13px;
+}
+
+/* =====================================================
+   字段项样式（优化高度和字体）
+   ===================================================== */
+.field-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+    padding: 6px 8px;
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #333;
+    user-select: none;
+    transition: all 0.2s;
+    min-height: 26px;
+    cursor: pointer;
+}
+
+.field-item:last-child {
+    margin-bottom: 0;
+}
+
+.field-item:hover {
+    background: #2196F3;
+    color: white;
+    border-color: #1976D2;
+}
+
+.field-item.dragging {
+    opacity: 0.5;
+}
+
+.field-item.draggable {
+    cursor: move;
+}
+
+.field-item.removable {
+    justify-content: space-between;
+}
+
+.field-item .content {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.field-item .remove-btn {
+    color: #666;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.field-item:hover .remove-btn {
+    color: white;
+}
+
+/* =====================================================
+   错误提示样式
+   ===================================================== */
+.error-container {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.error-message {
+    color: #f44336;
+    background: #ffebee;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    border-left: 3px solid #f44336;
+}
+
+/* =====================================================
+   计算字段按钮
+   ===================================================== */
+.add-field-btn {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    border: 1px solid #ccc;
+    background: transparent;
+    color: #999;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-field-btn:hover {
+    border-color: #999;
+    color: #666;
+}
+
+/* =====================================================
+   弹窗样式
+   ===================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modal {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: #333;
+}
+
+.modal-content {
+    margin-bottom: 16px;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.modal-input:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.modal-btn-cancel {
+    background: #f5f5f5;
+    color: #666;
+}
+
+.modal-btn-cancel:hover {
+    background: #e0e0e0;
+}
+
+.modal-btn-confirm {
+    background: #2196F3;
+    color: white;
+}
+
+.modal-btn-confirm:hover {
+    background: #1976D2;
+}
+
+/* =====================================================
+   弹出菜单
+   ===================================================== */
+.popup-menu {
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    min-width: 80px;
+}
+
+.popup-menu-item {
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #333;
+}
+
+.popup-menu-item:hover {
+    background: #f5f5f5;
+}
+
+.popup-menu-item.active {
+    background: #e3f2fd;
+    color: #2196F3;
+}
+
+/* 拖拽时的鼠标样式 */
+.field-item.draggable {
+    cursor: move;
+}
