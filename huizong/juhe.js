@@ -1,45 +1,29 @@
-// 聚合模块
+// 聚合模块 - 重构：直接使用显示格式，简化数据提取
 const AggregateModule = {
-    prepareFileInfo(processedData) {
-        const typeOrder = { '同期': 0, '上期': 1, '当期': 2 };
-        
-        return Object.entries(processedData)
-            .map(([fileName, data]) => {
-                const type = utils.getFileType(fileName);
-                return type ? { fileName, data, type, order: typeOrder[type] } : null;
-            })
-            .filter(Boolean)
-            .sort((a, b) => a.order - b.order);
-    },
-    
-    aggregateByPeriod(fileInfo) {
-        return fileInfo.reduce((acc, file) => {
-            acc[file.type] = file.data;
-            return acc;
-        }, {});
-    },
-    
     getAllGroupKeys(processedData) {
-        const groupKeys = new Set();
-        Object.values(processedData).forEach(fileData => {
-            Object.keys(fileData).forEach(key => groupKeys.add(key));
-        });
-        return Array.from(groupKeys).sort();
+        const keys = new Set();
+        Object.values(processedData).forEach(data => 
+            Object.keys(data).forEach(key => keys.add(key))
+        );
+        return Array.from(keys).sort();
     },
     
-    extractAllBasicInfo(periodData, basicInfoFields) {
+    // 提取分组和基础信息 - 直接使用字段名
+    extractGroupAndBasicInfo(processedData) {
         const basicInfo = {};
+        const groupData = {};
         
-        ['当期', '上期', '同期'].forEach(period => {
-            if (periodData[period]) {
-                Object.entries(periodData[period]).forEach(([groupKey, data]) => {
-                    if (!basicInfo[groupKey] && data.basicInfo) {
-                        basicInfo[groupKey] = { ...data.basicInfo };
-                    }
-                });
+        for (const fileData of Object.values(processedData)) {
+            for (const [groupKey, data] of Object.entries(fileData)) {
+                if (!basicInfo[groupKey] && data.basicInfo) {
+                    basicInfo[groupKey] = { ...data.basicInfo };
+                }
+                if (!groupData[groupKey] && data.groupData) {
+                    groupData[groupKey] = { ...data.groupData };
+                }
             }
-        });
+        }
         
-        return basicInfo;
+        return { basicInfo, groupData };
     }
 };

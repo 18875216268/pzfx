@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>同环比分析工具</title>
+    <title>品种数据汇总分析</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
     <link rel="stylesheet" href="gonggong/gonggong.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="tongzhi/tongzhi.css">
+    <link rel="stylesheet" href="huizong/chuangjian/chuangjian.css">
 </head>
 <body>
     <!-- 主布局 -->
@@ -39,7 +40,7 @@
                 </select>
             </div>
             
-            <div class="card-item fields-list-container">
+            <div class="card-item">
                 <div class="card-header">
                     <label>可用字段列表：</label>
                 </div>
@@ -69,21 +70,18 @@
                     <div id="aggregateFieldsInput" class="field-container" data-type="aggregate"></div>
                 </div>
                 
-                <!-- 3.基础信息 -->
+                <!-- 3.计算字段 -->
                 <div class="配置项">
                     <div class="config-header">
-                        <label>3.请选择基础信息：</label>
+                        <label>请创建计算字段：</label>
+                        <button id="addCalcFieldBtn" class="add-calc-btn">+</button>
                     </div>
-                    <div id="basicInfoFieldsInput" class="field-container" data-type="basicInfo"></div>
+                    <div id="calcFieldsInput" class="field-container" data-type="calculated"></div>
                 </div>
                 
-                <!-- 4.创建计算字段 -->
-                <div class="配置项 calc-field-section">
-                    <div class="config-header">
-                        <label>4.请创建计算字段：</label>
-                        <button id="addCalcFieldBtn" class="add-field-btn" title="添加计算字段">+</button>
-                    </div>
-                    <div id="calcFieldsList" class="field-container" data-type="calc"></div>
+                <!-- 4.预留功能 -->
+                <div class="配置项">
+                    <button class="placeholder-add-btn">+</button>
                 </div>
             </div>
             
@@ -109,12 +107,47 @@
         <p id="errorMessage" class="error-message"></p>
     </div>
 
+    <!-- 计算字段弹窗 -->
+    <div id="calcFieldModal" class="calc-field-modal" style="display: none;">
+        <div class="calc-field-modal-content">
+            <div class="calc-field-modal-header">
+                <h3>创建计算字段</h3>
+                <button class="calc-field-modal-close">&times;</button>
+            </div>
+            <div class="calc-field-modal-body">
+                <!-- 候选标签区域 -->
+                <div class="calc-field-candidate-area">
+                    <!-- 字段列表区域 -->
+                    <div class="calc-field-list-section">
+                        <div class="calc-field-section-header">字段列表</div>
+                        <div id="calcModalFieldsList" class="field-container"></div>
+                    </div>
+                    <!-- 已创建字段区域 -->
+                    <div class="calc-field-created-section">
+                        <div class="calc-field-section-header">已创建字段</div>
+                        <div id="calcModalCreatedFields" class="field-container"></div>
+                    </div>
+                </div>
+                <!-- 创建字段区域 -->
+                <div class="calc-field-input-area">
+                    <div id="calcFieldInput" class="calc-field-input" contenteditable="true" placeholder="字段名=表达式（按Enter换行，支持多个）"></div>
+                </div>
+            </div>
+            <div class="calc-field-modal-footer">
+                <button id="calcFieldCancelBtn" class="btn">取消</button>
+                <button id="calcFieldAddBtn" class="btn btn-primary">添加</button>
+                <button id="calcFieldConfirmBtn" class="btn btn-primary">确认</button>
+            </div>
+        </div>
+    </div>
+
     <script src="gonggong/gonggong.js"></script>
     <script src="tongzhi/tongzhi.js"></script>
     <script src="huizong/fenzu.js"></script>
-    <script src="huizong/jisuan.js"></script>
     <script src="huizong/juhe.js"></script>
     <script src="huizong/tianchong.js"></script>
+    <script src="huizong/chuangjian/jisuan.js"></script>
+    <script src="huizong/chuangjian.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

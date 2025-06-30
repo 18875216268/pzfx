@@ -1,0 +1,214 @@
+/* =====================================================
+   计算字段按钮样式
+   ===================================================== */
+.add-calc-btn {
+    margin-left: auto;
+    background: transparent;
+    border: none;
+    color: #999;
+    font-size: 20px;
+    font-weight: 300;
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+    transition: color 0.3s ease;
+}
+
+.add-calc-btn:hover {
+    color: #2196F3;
+}
+
+/* =====================================================
+   弹窗样式
+   ===================================================== */
+.calc-field-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.calc-field-modal-content {
+    background: white;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+}
+
+.calc-field-modal-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.calc-field-modal-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.calc-field-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calc-field-modal-close:hover {
+    color: #666;
+}
+
+.calc-field-modal-body {
+    flex: 1;
+    padding: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* =====================================================
+   候选标签区域
+   ===================================================== */
+.calc-field-candidate-area {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    height: 300px;
+}
+
+.calc-field-list-section,
+.calc-field-created-section {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.calc-field-section-header {
+    padding: 10px 15px;
+    background: #fafafa;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    flex-shrink: 0;
+}
+
+/* 复用主界面的 field-container 样式，仅添加必要的覆盖 */
+.calc-field-modal .field-container {
+    flex: 1;
+    border: none;
+    border-radius: 0;
+    max-height: none;
+    overflow-y: auto;
+}
+
+/* 已创建字段项 - 基于 field-item 扩展 */
+.calc-created-field-item {
+    position: relative;
+}
+
+.calc-created-field-item .content {
+    display: flex;
+    flex-direction: column;
+}
+
+.calc-created-field-item .field-name {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.calc-created-field-item .field-formula {
+    font-size: 11px;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.calc-created-field-item:hover .field-formula {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* =====================================================
+   创建字段输入区域
+   ===================================================== */
+.calc-field-input-area {
+    flex-shrink: 0;
+}
+
+.calc-field-input {
+    width: 100%;
+    height: 120px; /* 固定高度 */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    line-height: 1.8; /* 增加行高，相当于行间距 */
+    outline: none;
+    overflow-y: auto; /* 内容超出时显示滚动条 */
+    overflow-x: hidden;
+    white-space: pre-wrap; /* 保持换行 */
+    word-wrap: break-word;
+}
+
+.calc-field-input:focus {
+    border-color: #2196F3;
+}
+
+.calc-field-input:empty:before {
+    content: attr(placeholder);
+    color: #999;
+}
+
+/* 字段标签样式 */
+.field-tag {
+    display: inline-block;
+    padding: 2px 6px;
+    margin: 0 2px;
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+    border-radius: 3px;
+    font-size: 13px;
+    color: #1976D2;
+    font-family: inherit;
+    white-space: nowrap;
+    line-height: 1.4; /* 与输入框行高匹配 */
+    vertical-align: baseline; /* 确保对齐 */
+}
+
+/* =====================================================
+   弹窗底部按钮区域
+   ===================================================== */
+.calc-field-modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}

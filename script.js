@@ -1,47 +1,37 @@
-// 处理文件选择
+// 处理文件选择 - 保持不变
 async function handleFileSelect(event) {
     const files = Array.from(event.target.files);
-    state.selectedFiles = files.filter(file => 
-        /\.(xlsx?|xls)$/i.test(file.name) && utils.getFileType(file.name)
-    );
+    const excelFiles = files.filter(file => /\.(xlsx?|xls)$/i.test(file.name));
     
-    if (state.selectedFiles.length > 0) {
-        document.getElementById('folderPath').value = state.selectedFiles.map(f => f.name).join(', ');
-        utils.hideError();
-        
-        // 重置所有字段
-        Object.assign(state, {
-            groupFields: [],
-            aggregateFields: {},
-            basicInfoFields: [],
-            calcFields: {}
-        });
-        
-        // 重新渲染所有区域
-        ['group', 'aggregate', 'basicInfo'].forEach(type => {
-            dragDropManager?.renderFields(type);
-        });
-        renderCalcFields();
-        fieldsListManager?.reset();
-    } else {
-        document.getElementById('folderPath').value = '';
-        if (files.length > 0) {
-            utils.showError('未找到包含"同期"、"上期"、"当期"的Excel文件');
-        }
+    if (excelFiles.length > CONFIG.maxFiles) {
+        utils.showError(`最多只能选择 ${CONFIG.maxFiles} 个文件`);
+        event.target.value = '';
+        return;
     }
     
+    if (!excelFiles.length && files.length) {
+        utils.showError('请选择有效的Excel文件（.xlsx, .xls）');
+    }
+    
+    // 重置状态
+    state.reset();
+    state.selectedFiles = excelFiles;
+    document.getElementById('folderPath').value = excelFiles.map(f => f.name).join(', ');
+    
+    UIManager.renderAllFields();
+    UIManager.renderContainer('fieldsListArea', [], { placeholder: CONFIG.placeholder.needSetup });
     checkButtonStates();
 }
 
-// 处理标题行选择
+// 处理标题行选择 - 保持不变
 async function handleHeaderRowSelect() {
     const headerRowValue = document.getElementById('headerRowSelect').value;
     if (!state.selectedFiles.length || !headerRowValue) {
-        fieldsListManager.reset();
+        UIManager.renderContainer('fieldsListArea', [], { placeholder: CONFIG.placeholder.needSetup });
         return;
     }
 
-    fieldsListManager.showLoading();
+    UIManager.renderContainer('fieldsListArea', CONFIG.placeholder.loading);
 
     try {
         const workbook = await ExcelReader.readFile(state.selectedFiles[0]);
@@ -49,139 +39,61 @@ async function handleHeaderRowSelect() {
         const fields = ExcelReader.extractFields(worksheet, parseInt(headerRowValue));
         
         state.allFields = fields;
-        fieldsListManager.setFields(fields);
-        checkButtonStates();
+        UIManager.renderContainer('fieldsListArea', fields);
     } catch (error) {
         utils.showError('读取字段失败');
         console.error('读取字段失败：', error);
-    }
-}
-
-// 计算字段相关函数
-function showCalcFieldModal() {
-    const modalHtml = `
-        <div class="modal-overlay" id="calcFieldModal">
-            <div class="modal">
-                <div class="modal-header">创建计算字段</div>
-                <div class="modal-content">
-                    <input type="text" id="calcFieldInput" class="modal-input" 
-                           placeholder="新字段=表达式 (如: 毛利率=毛利额/销售额)">
-                    <div style="margin-top: 8px; font-size: 12px; color: #666;">
-                        提示：请使用已添加的聚合字段进行计算
-                    </div>
-                </div>
-                <div class="modal-actions">
-                    <button class="modal-btn modal-btn-cancel" onclick="closeCalcFieldModal()">取消</button>
-                    <button class="modal-btn modal-btn-confirm" onclick="confirmCalcField()">确认</button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
-    
-    const input = document.getElementById('calcFieldInput');
-    input.focus();
-    input.addEventListener('keypress', e => e.key === 'Enter' && confirmCalcField());
-}
-
-function closeCalcFieldModal() {
-    document.getElementById('calcFieldModal')?.remove();
-}
-
-function confirmCalcField() {
-    const input = document.getElementById('calcFieldInput');
-    const content = input.value.trim();
-    
-    if (!content) {
-        closeCalcFieldModal();
-        return;
+        UIManager.renderContainer('fieldsListArea', [], { placeholder: CONFIG.placeholder.needSetup });
     }
     
-    const match = content.match(/^([^=]+)=(.+)$/);
-    if (!match) {
-        utils.showError('公式格式错误，请使用：新字段=表达式');
-        return;
-    }
-    
-    const [, fieldName, expression] = match.map(s => s.trim());
-    
-    if (!fieldName || !expression) {
-        utils.showError('字段名和表达式不能为空');
-        return;
-    }
-    
-    state.calcFields[fieldName] = expression;
-    renderCalcFields();
-    closeCalcFieldModal();
-    utils.hideError();
+    checkButtonStates();
 }
 
-// 渲染计算字段
-function renderCalcFields() {
-    const fields = Object.entries(state.calcFields).map(([field, expr]) => ({
-        field,
-        displayText: `${field} = ${expr}`
-    }));
-    
-    FieldRenderer.renderToContainer('calcFieldsList', fields, {
-        itemOptions: { removable: true },
-        placeholder: CONFIG.placeholder.default
-    });
-}
-
-// 处理文件
+// 处理文件 - 增加计算字段处理
 async function processFiles() {
     const headerRowNum = parseInt(document.getElementById('headerRowSelect').value);
     const processBtn = document.getElementById('processBtn');
     
-    const originalText = processBtn.textContent;
     processBtn.disabled = true;
     processBtn.textContent = '正在处理中......';
     
-    setTimeout(async () => {
-        try {
-            const processedData = {};
-            
-            for (const file of state.selectedFiles) {
-                const workbook = await ExcelReader.readFile(file);
-                const worksheet = workbook.getWorksheet(1);
-                processedData[file.name] = GroupModule.processWorksheet(
-                    worksheet, headerRowNum, state.allFields, 
-                    state.groupFields, state.aggregateFields
-                );
-            }
-            
-            state.processedData = processedData;
-            state.summaryWorkbook = FillModule.createSummaryWorkbook(
-                processedData, state.groupFields, state.aggregateFields, 
-                state.calcFields, state.basicInfoFields, state.allFields
-            );
-            
-            const stats = {
-                groups: AggregateModule.getAllGroupKeys(processedData).length,
-                aggregates: Object.keys(state.aggregateFields).length,
-                calcs: Object.keys(state.calcFields).length
-            };
-            
-            notification.show(
-                `处理完成！${stats.groups} 个分组，${stats.aggregates} 个聚合字段，${stats.calcs} 个计算字段`
-            );
-            
-            document.getElementById('downloadBtn').disabled = false;
-            
-        } catch (error) {
-            console.error('处理错误：', error);
-            utils.showError(`处理失败：${error.message}`);
-            notification.show('处理失败，请查看错误信息', 'error');
-        } finally {
-            processBtn.textContent = originalText;
-            checkButtonStates();
+    try {
+        const processedData = {};
+        
+        // 处理每个文件
+        for (const file of state.selectedFiles) {
+            const workbook = await ExcelReader.readFile(file);
+            const worksheet = workbook.getWorksheet(1);
+            processedData[file.name] = GroupModule.processWorksheet(worksheet, headerRowNum);
         }
-    }, 0);
+        
+        // 应用计算字段
+        if (state.calcFields && state.calcFields.length > 0) {
+            CalcEngine.calculateForAllGroups(processedData, state.calcFields);
+        }
+        
+        state.processedData = processedData;
+        state.summaryWorkbook = FillModule.createSummaryWorkbook(processedData);
+        
+        const groupCount = AggregateModule.getAllGroupKeys(processedData).length;
+        const calcFieldsCount = state.calcFields ? state.calcFields.length : 0;
+        notification.show(
+            `处理完成！${state.selectedFiles.length} 个文件，${groupCount} 个分组，${state.aggregateFields.length} 个聚合字段${calcFieldsCount > 0 ? `，${calcFieldsCount} 个计算字段` : ''}`
+        );
+        
+        document.getElementById('downloadBtn').disabled = false;
+        
+    } catch (error) {
+        console.error('处理错误：', error);
+        utils.showError(`处理失败：${error.message}`);
+        notification.show('处理失败，请查看错误信息', 'error');
+    } finally {
+        processBtn.textContent = '开始处理';
+        checkButtonStates();
+    }
 }
 
-// 下载结果
+// 下载结果 - 保持不变
 async function downloadResult() {
     if (!state.summaryWorkbook) {
         notification.show('没有可下载的数据', 'error');
@@ -204,7 +116,7 @@ async function downloadResult() {
         
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `品种同环比分析_${utils.formatDate()}.xlsx`;
+        link.download = `品种数据汇总_${utils.formatDate()}.xlsx`;
         link.click();
         
         setTimeout(() => URL.revokeObjectURL(link.href), 100);
@@ -219,25 +131,13 @@ async function downloadResult() {
     }
 }
 
-// 初始化
+// 初始化 - 保持不变
 document.addEventListener('DOMContentLoaded', () => {
-    // 初始化管理器
-    dragDropManager = new DragDropManager();
-    fieldsListManager = new FieldsListManager('fieldsListArea');
-    
-    // 绑定事件
-    const events = {
-        'selectFolderBtn': ['click', () => document.getElementById('folderInput').click()],
-        'folderInput': ['change', handleFileSelect],
-        'headerRowSelect': ['change', handleHeaderRowSelect],
-        'processBtn': ['click', processFiles],
-        'downloadBtn': ['click', downloadResult],
-        'addCalcFieldBtn': ['click', showCalcFieldModal]
-    };
-    
-    Object.entries(events).forEach(([id, [event, handler]]) => {
-        document.getElementById(id)?.addEventListener(event, handler);
+    document.getElementById('selectFolderBtn').addEventListener('click', () => {
+        document.getElementById('folderInput').click();
     });
-    
-    checkButtonStates();
+    document.getElementById('folderInput').addEventListener('change', handleFileSelect);
+    document.getElementById('headerRowSelect').addEventListener('change', handleHeaderRowSelect);
+    document.getElementById('processBtn').addEventListener('click', processFiles);
+    document.getElementById('downloadBtn').addEventListener('click', downloadResult);
 });
