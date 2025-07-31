@@ -16,7 +16,7 @@ const CONFIG = {
         needSetup: '请先选择文件和标题行......',
         loading: '字段加载中......'
     },
-    maxFiles: 6
+    maxFiles: 10
 };
 
 // 状态管理器 - 重构：直接使用显示格式作为内部存储
